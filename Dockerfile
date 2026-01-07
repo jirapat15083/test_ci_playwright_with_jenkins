@@ -1,0 +1,7 @@
+# ใช้ official Playwright image ที่มี browser และ dependencies พร้อม
+FROM mcr.microsoft.com/playwright:focal
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+CMD ["npx", "playwright", "test", "--grep", "@regression"]
