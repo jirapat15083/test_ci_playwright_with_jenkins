@@ -1,7 +1,20 @@
-# ใช้ official Playwright image ที่มี browser และ dependencies พร้อม
-FROM mcr.microsoft.com/playwright:focal
+# ใช้ Node.js official image
+FROM node:24
+
+# ตั้ง working directory
 WORKDIR /app
+
+# copy package.json และ package-lock.json
 COPY package*.json ./
+
+# ติดตั้ง dependencies ของ npm
 RUN npm install
+
+# ติดตั้ง dependencies ของ Playwright browser
+RUN npx playwright install --with-deps
+
+# copy source code
 COPY . .
-CMD ["npx", "playwright", "test", "--grep", "@regression"]
+
+# รัน Playwright test โดย default
+CMD ["npx", "playwright", "test", "--reporter=line"]
