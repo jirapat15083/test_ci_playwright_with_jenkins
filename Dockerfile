@@ -17,4 +17,4 @@ RUN npx playwright install --with-deps
 COPY . .
 
 # รัน Playwright test โดย default
-CMD ["npx", "playwright", "test", "--reporter=line"]
+CMD ["npx", "playwright", "test", "--grep", "@regression", "--reporter=line"]
