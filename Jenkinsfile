@@ -32,6 +32,14 @@ pipeline {
                     echo "Docker image built!"
                 }
             }
+    }
+    stage('Run Playwright Tests') {
+        steps {
+            sh '''
+            docker run --rm \
+                test_playwright
+            '''
         }
+    }
   }
 }
