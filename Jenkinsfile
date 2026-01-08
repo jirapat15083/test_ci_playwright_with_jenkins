@@ -37,7 +37,7 @@ pipeline {
         steps {
             sh '''
             docker run --rm \
-                test_playwright npx playwright test --reporter=html
+                test_playwright 
             '''
         }
     }
