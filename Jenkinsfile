@@ -78,7 +78,7 @@
             sh """
                 curl -H "Content-Type: application/json" \
                 -X POST \
-                -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
+                -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report"}' \
                 $DISCORD_WEBHOOK
             """
         }
@@ -86,7 +86,7 @@
             sh """
                 curl -H "Content-Type: application/json" \
                 -X POST \
-                -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
+                -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}artifact/playwright-report"}' \
                 $DISCORD_WEBHOOK
             """
         }
