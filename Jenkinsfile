@@ -67,4 +67,28 @@ pipeline {
     }
 
   }
+
+  post {
+    success {
+        node {
+            sh """
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
+                $DISCORD_WEBHOOK
+            """
+        }
+    }
+    failure {
+        node {
+            sh """
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
+                $DISCORD_WEBHOOK
+            """
+        }
+    }
+}
+  
 }
