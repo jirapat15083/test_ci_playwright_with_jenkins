@@ -17,7 +17,7 @@ pipeline {
         steps {
             sh '''
             docker rmi test_playwright || true
-            echo "test_env": $test_env
+            echo "test_env: $test_env"
             '''
         }
     }
@@ -28,12 +28,10 @@ pipeline {
       }
     }
     stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t ${IMAGE_NAME} .'
-                    echo "Docker image built!"
-                }
-            }
+        steps {
+            sh 'docker build -t ${IMAGE_NAME} .'
+            echo "Docker image built!"
+        }
     }
     stage('Run Playwright Tests') {
         steps {
@@ -46,26 +44,20 @@ pipeline {
   }
   post {
     success {
-        node{
-             sh '''
-                curl -H "Content-Type: application/json" \
-                -X POST \
-                -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
-                $DISCORD_WEBHOOK
-            '''
-        }
-           
-        }
-        failure {
-            node{
-                sh '''
-                curl -H "Content-Type: application/json" \
-                -X POST \
-                -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
-                $DISCORD_WEBHOOK
-                '''
-            }       
-        }
-
+        sh '''
+            curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
+            $DISCORD_WEBHOOK
+        '''
+    }
+    failure {
+        sh '''
+            curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
+            $DISCORD_WEBHOOK
+        '''
+    }
   }
 }
