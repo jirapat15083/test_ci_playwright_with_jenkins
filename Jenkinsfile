@@ -1,6 +1,5 @@
 pipeline {
   agent any
-  
   environment {
         IMAGE_NAME = 'test_playwright'
         TEST_RESULTS = 'test-results'
@@ -47,20 +46,25 @@ pipeline {
   }
   post {
     success {
-            sh '''
+        node{
+             sh '''
                 curl -H "Content-Type: application/json" \
                 -X POST \
                 -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
                 $DISCORD_WEBHOOK
             '''
         }
+           
+        }
         failure {
-            sh '''
+            node{
+                sh '''
                 curl -H "Content-Type: application/json" \
                 -X POST \
                 -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
                 $DISCORD_WEBHOOK
-            '''
+                '''
+            }       
         }
 
   }
