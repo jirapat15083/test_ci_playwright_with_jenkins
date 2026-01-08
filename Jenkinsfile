@@ -37,58 +37,33 @@ pipeline {
         steps {
             sh '''
             docker run --rm \
-                test_playwright
+                test_playwright npx playwright test --reporter=html
             '''
         }
-        
     }
     stage('Archive Playwright Report') {
         steps {
             archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
         }
-        post {
-            success {
-                sh """
-                    curl -H "Content-Type: application/json" \
-                    -X POST \
-                    -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
-                    $DISCORD_WEBHOOK
-                """
-            }
-            failure {
-                sh """
-                    curl -H "Content-Type: application/json" \
-                    -X POST \
-                    -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
-                    $DISCORD_WEBHOOK
-                """
-            }
-        }
     }
-
   }
 
   post {
     success {
-        node {
-            sh """
-                curl -H "Content-Type: application/json" \
-                -X POST \
-                -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
-                $DISCORD_WEBHOOK
-            """
-        }
+        sh """
+            curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
+            $DISCORD_WEBHOOK
+        """
     }
     failure {
-        node {
-            sh """
-                curl -H "Content-Type: application/json" \
-                -X POST \
-                -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
-                $DISCORD_WEBHOOK
-            """
-        }
+        sh """
+            curl -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
+            $DISCORD_WEBHOOK
+        """
     }
-}
-  
+  }
 }
