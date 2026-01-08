@@ -40,12 +40,18 @@ pipeline {
                 test_playwright
             '''
         }
+        
+    }
+    stage('Archive Playwright Report') {
+        steps {
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
+        }
         post {
             success {
                 sh """
                     curl -H "Content-Type: application/json" \
                     -X POST \
-                    -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
+                    -d '{"content":"✅ Playwright tests passed! Report: ${BUILD_URL}artifact/playwright-report/index.html"}' \
                     $DISCORD_WEBHOOK
                 """
             }
@@ -53,11 +59,12 @@ pipeline {
                 sh """
                     curl -H "Content-Type: application/json" \
                     -X POST \
-                    -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
+                    -d '{"content":"❌ Playwright tests failed. See Jenkins logs: ${BUILD_URL}"}' \
                     $DISCORD_WEBHOOK
                 """
             }
         }
     }
+
   }
 }
