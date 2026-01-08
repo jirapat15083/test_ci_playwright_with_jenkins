@@ -57,13 +57,16 @@
                 archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
             }
         }
-        
+
         stage('Publish Playwright Report') {
             steps {
-                publishHTML(target: [
+               publishHTML(target: [
                     reportDir: 'playwright-report',
                     reportFiles: 'index.html',
-                    reportName: 'Playwright Report'
+                    reportName: 'Playwright Report',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: false
                 ])
             }
         }
