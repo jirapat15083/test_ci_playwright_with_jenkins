@@ -4,6 +4,7 @@ pipeline {
   environment {
         IMAGE_NAME = 'test_playwright'
         TEST_RESULTS = 'test-results'
+        test_env = credentials('my_secret_key')
     }
 
   stages {
@@ -16,6 +17,7 @@ pipeline {
         steps {
             sh '''
             docker rmi test_playwright || true
+            echo "test_env": $test_env
             '''
         }
     }
