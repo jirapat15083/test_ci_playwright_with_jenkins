@@ -44,20 +44,24 @@ pipeline {
   }
   post {
     success {
+        script {
         sh '''
             curl -H "Content-Type: application/json" \
             -X POST \
             -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
             $DISCORD_WEBHOOK
         '''
+        }
     }
     failure {
+        script {
         sh '''
             curl -H "Content-Type: application/json" \
             -X POST \
             -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
             $DISCORD_WEBHOOK
         '''
+        }
     }
   }
 }
