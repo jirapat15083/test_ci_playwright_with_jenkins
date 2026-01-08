@@ -4,7 +4,7 @@ pipeline {
         IMAGE_NAME = 'test_playwright'
         TEST_RESULTS = 'test-results'
         test_env = credentials('my_secret_key')
-        DISCORD_WEBHOOK = credentials('discord-webhook')
+        DISCORD_WEBHOOK = credentials('webhook-discord')
     }
 
   stages {
