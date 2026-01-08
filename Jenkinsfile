@@ -5,6 +5,7 @@ pipeline {
         IMAGE_NAME = 'test_playwright'
         TEST_RESULTS = 'test-results'
         test_env = credentials('my_secret_key')
+        DISCORD_WEBHOOK = credentials('discord-webhook')
     }
 
   stages {
@@ -43,5 +44,24 @@ pipeline {
             '''
         }
     }
+  }
+  post {
+    success {
+            sh '''
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{"content":"✅ Playwright tests passed successfully on Jenkins!"}' \
+                $DISCORD_WEBHOOK
+            '''
+        }
+        failure {
+            sh '''
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{"content":"❌ Playwright tests failed. Please check Jenkins logs."}' \
+                $DISCORD_WEBHOOK
+            '''
+        }
+
   }
 }
