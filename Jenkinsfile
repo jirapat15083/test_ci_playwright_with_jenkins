@@ -37,6 +37,7 @@ pipeline {
         steps {
             sh '''
             docker run --rm \
+                -v $WORKSPACE:/app \
                 test_playwright 
             '''
         }
