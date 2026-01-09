@@ -1,8 +1,5 @@
 name: Playwright Tests From GitHub Actions
-on:
-  repository_dispatch:
-    types: [web_trigger]
- 
+on: workflow_dispatch
 jobs:
   test:
     timeout-minutes: 60
