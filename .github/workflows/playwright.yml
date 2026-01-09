@@ -21,3 +21,17 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Notify Discord on Success
+      if: success()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: info
+        details: '🚀 Playwright Regression Tests Passed!'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+    - name: Notify Discord on Failure
+      if: failure()
+      uses: rjstone/discord-webhook-notify@v1
+      with:
+        severity: error
+        details: '❌ Playwright Regression Tests Failed! Please check the artifact report.'
+        webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
